@@ -23,7 +23,7 @@ def webhook():
     # endpoint for processing incoming messaging events
 
     data = request.get_json()
-    log(data)  # you may not want to log every incoming message in production, but it's good for testing
+      # you may not want to log every incoming message in production, but it's good for testing
 
     if data["object"] == "page":   # make sure this is a page subscription
 
@@ -45,7 +45,7 @@ def webhook():
                     received_postback(messaging_event)
 
                 else:    # uknown messaging_event
-                    log("Webhook received unknown messaging_event: " + messaging_event)
+                    return("Webhook received unknown messaging_event: " + messaging_event)
 
     return "ok", 200
 
@@ -132,7 +132,7 @@ def send_generic_message(recipient_id):
         }
     })
 
-    log("sending template with choices to {recipient}: ".format(recipient=recipient_id))
+    
 
     call_send_api(message_data)
 
@@ -146,9 +146,7 @@ def call_send_api(message_data):
     }
     
     r = requests.post("https://graph.facebook.com/v7.0/me/messages, params=params, headers=headers, data=message_data")
-    if r.status_code != 200:
-        log(r.status_code)
-        log(r.text)
+    
 
 
 if __name__ == "__main__":
