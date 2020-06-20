@@ -4,15 +4,14 @@ from pymessenger import Bot
 
 
 
-PAGE_ACCESS_TOKEN = os.environ["PAGE_ACCESS_TOKEN"]
-VERIFY_TOKEN = os.environ["VERIFY_TOKEN"]
+
 app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def verify():
 	# Webhook verification
     if request.args.get("hub.mode") == "subscribe" and request.args.get("hub.challenge"):
-        if not request.args.get("hub.verify_token") == VERIFY_TOKEN:
+        if not request.args.get("hub.verify_token") == os.environ["VERIFY_TOKEN"]:
             return "Verification token mismatch", 403
         return request.args["hub.challenge"], 200
     return "Hello world", 200
@@ -140,7 +139,7 @@ def send_generic_message(recipient_id):
 def call_send_api(message_data):
 
     params = {
-        "access_token": PAGE_ACCESS_TOKEN
+        "access_token": os.environ["PAGE_ACCESS_TOKEN"]
     }
     headers = {
         "Content-Type": "application/json"
