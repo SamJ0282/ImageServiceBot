@@ -1,5 +1,6 @@
 import os, sys
 from flask import Flask, request
+import requests
 from pymessenger import Bot
 import json
 
@@ -145,7 +146,7 @@ def call_send_api(message_data):
         "Content-Type": "application/json"
     }
     
-    r = request.post("https://graph.facebook.com/v7.0/me/messages, params=params, headers=headers, data=message_data")
+    r = requests.post("https://graph.facebook.com/v7.0/me/messages, params=params, headers=headers, data=message_data")
     
 
 
