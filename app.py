@@ -46,7 +46,7 @@ def webhook():
                     received_postback(messaging_event)
 
                 else:    # uknown messaging_event
-                    print("Webhook received unknown messaging_event: " + messaging_event)
+                    pass
 
     return "ok", 200
 
