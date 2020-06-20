@@ -46,7 +46,7 @@ def webhook():
                     received_postback(messaging_event)
 
                 else:    # uknown messaging_event
-                    return("Webhook received unknown messaging_event: " + messaging_event)
+                    print("Webhook received unknown messaging_event: " + messaging_event)
 
     return "ok", 200
 
@@ -58,6 +58,7 @@ def received_message(event):
     # could receive text or attachment but not both
     if "text" in event["message"]:
         message_text = event["message"]["text"]
+        print(message_text)
 
         # parse message_text and give appropriate response   
         if message_text == 'image' or message_text == 'Image':
