@@ -145,7 +145,7 @@ def call_send_api(message_data):
         "Content-Type": "application/json"
     }
     
-    r = requests.post("https://graph.facebook.com/v7.0/me/messages, params=params, headers=headers, data=message_data")
+    r = request.post("https://graph.facebook.com/v7.0/me/messages, params=params, headers=headers, data=message_data")
     
 
 
