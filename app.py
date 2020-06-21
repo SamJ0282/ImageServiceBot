@@ -54,40 +54,12 @@ def received_message(event):
         message_text = event["message"]["text"]
         print(message_text)
 
-        # parse message_text and give appropriate response   
-        if message_text == 'image' or message_text == 'Image':
-            send_image_message(sender_id)
-
-        elif message_text == 'file' or message_text == 'File':
-            send_file_message(sender_id)
-
-        elif message_text == 'audio' or message_text == 'Audio':
-            send_audio_message(sender_id)
-
-        elif message_text == 'video' or message_text == 'Video':
-            send_video_message(sender_id)
-
-        elif message_text == 'button' or message_text == 'Button':
-            send_button_message(sender_id)
-
-        elif message_text == 'generic' or message_text == 'Generic':
-            send_generic_message(sender_id)
-
-        elif message_text == 'share' or message_text == 'Share':
-            send_share_message(sender_id)
-
-        elif message_text == 'getcolors':
-            get_color(sender_id)
-
-        else: # default case
-            send_text_message(sender_id, "Echo: " + message_text)
-
     elif "attachments" in event["message"]:
-        message_attachments = event["message"]["attachments"]
-        send_text_message(sender_id, "Message with attachment received")
+        image_url = event["message"]["attachment"]["payload"]["url"]
+        send_color_message(sender_id, image_url)
 
 
-    
+"""
 def send_generic_message(recipient_id):
 
     message_data = json.dumps({
@@ -136,14 +108,40 @@ def send_generic_message(recipient_id):
     
 
     call_send_api(message_data)
+"""
 
+#RECIEVE IMAGE FROM USER
+def send_color_message(recipient_id,image_url):
+    app = ClarifaiApp(api_key = os.environ["CLARIFAI_API_KEY"])
+    model = app.models.get('color')
 
+    image = Image(url = image_url)
+    response = model.predict([image])
 
+    outputs = response["outputs"]
+    color_list= []
 
+    for i in outputs:
+        color_list.append(i["data"]["colors"])
+
+    colors = []
+    for j in color_list[0]:
+        colors.append(j["w3c"]["name"])
+
+    message_data = json.dumps({
+        "recipient": {
+            "id": recipient_id
+        },
+        "message": {
+            "text": "{}".format(colors)
+        }
+    })
+
+    call_send_api(message_data)
+    
+ 
 #USING CLARIFAI API
-
-
-
+"""
 def get_color(recipient_id):
     app = ClarifaiApp(api_key = os.environ["CLARIFAI_API_KEY"])
     model = app.models.get('color')
@@ -171,8 +169,9 @@ def get_color(recipient_id):
     })
 
     call_send_api(message_data)
+"""
 
-
+"""
 def send_text_message(recipient_id, message_text):
 
     # encode('utf-8') included to log emojis to heroku logs
@@ -187,6 +186,11 @@ def send_text_message(recipient_id, message_text):
     })
 
     call_send_api(message_data)
+
+
+"""
+    
+
 
 #SEND API
 def call_send_api(message_data):
