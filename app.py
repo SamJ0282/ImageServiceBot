@@ -54,7 +54,7 @@ def received_message(event):
         message_text = event["message"]["text"]
         print(message_text)
 
-    elif "attachments" in event["message"]:
+    elif "attachment" in event["message"]:
         image_url = event["message"]["attachment"]["payload"]["url"]
         send_color_message(sender_id, image_url)
 
