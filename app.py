@@ -165,7 +165,7 @@ def get_color():
 
 
 def send_text_message(recipient_id):
-
+    get_color()
     message_data = json.dumps({
         "recipient": {
             "id": recipient_id
