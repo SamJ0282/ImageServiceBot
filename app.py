@@ -54,6 +54,8 @@ def received_message(event):
         
         if message_text == 'stores':
             send_store_names(sender_id)
+        if message_text == 'shop A':
+            send_storeA_details(sender_id)
 
     elif "attachments" in event["message"]:
         pass
@@ -82,6 +84,22 @@ def send_store_names(recipient_id):
                     "payload":"<POSTBACK_PAYLOAD>",
                 }
             ]
+        }
+    })
+
+    call_send_api(message_data)
+
+
+
+items = ["Brown Bread","Lays","Potatoes"]
+
+def send_storeA_details(recipient_id):
+    message_data = json.dumps({
+        "recipient":{
+            "id":recipient_id
+        },
+        "message":{
+            "text": items
         }
     })
 
