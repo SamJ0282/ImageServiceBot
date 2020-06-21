@@ -92,14 +92,14 @@ def send_store_names(recipient_id):
 
 
 items = ["Brown Bread","Lays","Potatoes"]
-
 def send_storeA_details(recipient_id):
+    
     message_data = json.dumps({
         "recipient":{
             "id":recipient_id
         },
         "message":{
-            "text": items
+            "text": "{}".format(items)
         }
     })
 
