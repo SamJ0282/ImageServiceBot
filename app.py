@@ -1,6 +1,7 @@
 import os, sys
 from flask import Flask, request
 from pymessenger import Bot
+
 from clarifai.rest import ClarifaiApp
 from clarifai.rest import Image
 import json
@@ -170,7 +171,7 @@ def send_text_message(recipient_id):
             "id": recipient_id
         },
         "message": {
-            "text": get_color() #Calling get_color function to get list of colors
+            "text": [k for k in colors]
         }
     })
 
