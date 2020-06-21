@@ -166,7 +166,7 @@ def get_color(recipient_id):
             "id": recipient_id
         },
         "message": {
-            "text": colors
+            "text": "{}".format(colors)
         }
     })
 
