@@ -171,7 +171,7 @@ def send_text_message(recipient_id):
             "id": recipient_id
         },
         "message": {
-            "text": [k for k in colors]
+            "text": "Colors are:{}".format([k for k in colors])
         }
     })
 
