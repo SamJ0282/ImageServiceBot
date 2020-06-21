@@ -166,25 +166,14 @@ def get_color(recipient_id):
             "id": recipient_id
         },
         "message": {
-            "text": "Colors are: {}".format(k for k in colors) 
+            "text": colors
         }
     })
 
     call_send_api(message_data)
 
 
-def send_text_message(recipient_id):
-    get_color()
-    message_data = json.dumps({
-        "recipient": {
-            "id": recipient_id
-        },
-        "message": {
-            "text": "Colors are:{}".format(colors)
-        }
-    })
 
-    call_send_api(message_data)
 
 #SEND API
 def call_send_api(message_data):
