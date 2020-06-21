@@ -64,7 +64,7 @@ def received_message(event):
 
 def send_store_names(recipient_id):
     message_data = json.dumps({
-        "recipient_id":{
+        "recipient":{
             "id":recipient_id
         },
         "messaging_type": "RESPONSE",
