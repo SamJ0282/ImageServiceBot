@@ -144,7 +144,7 @@ def send_generic_message(recipient_id):
 
 
 
-def get_color():
+def get_color(recipient_id):
     app = ClarifaiApp(api_key = os.environ["CLARIFAI_API_KEY"])
     model = app.models.get('color')
 
