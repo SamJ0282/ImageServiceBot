@@ -134,7 +134,7 @@ def send_color_message(recipient_id,image_url):
             "id": recipient_id
         },
         "message": {
-            "text": "{}".format(colors)
+            "text": "{}".format([k for k in colors])
         }
     })
 
