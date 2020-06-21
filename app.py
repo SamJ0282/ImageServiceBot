@@ -142,6 +142,7 @@ def send_generic_message(recipient_id):
 
 #USING CLARIFAI API
 
+
 colors = []
 def get_color():
     app = ClarifaiApp(api_key = os.environ["CLARIFAI_API_KEY"])
@@ -160,6 +161,7 @@ def get_color():
     for j in color_list[0]:
         colors.append(j["w3c"]["name"])
     return colors
+    colors.clear()
 
 
 
