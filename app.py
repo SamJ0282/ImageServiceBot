@@ -173,7 +173,21 @@ def get_color(recipient_id):
     call_send_api(message_data)
 
 
+def send_text_message(recipient_id, message_text):
 
+    # encode('utf-8') included to log emojis to heroku logs
+    log("sending message to {recipient}: {text}".format(recipient=recipient_id, text=message_text.encode('utf-8')))
+
+    message_data = json.dumps({
+        "recipient": {
+            "id": recipient_id
+        },
+        "message": {
+            "text": message_text
+        }
+    })
+
+    call_send_api(message_data)
 
 #SEND API
 def call_send_api(message_data):
