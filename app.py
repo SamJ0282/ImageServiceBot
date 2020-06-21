@@ -2,8 +2,6 @@ import os, sys
 from flask import Flask, request
 from pymessenger import Bot
 
-from clarifai.rest import ClarifaiApp
-from clarifai.rest import Image
 import json
 import requests
 
@@ -53,147 +51,44 @@ def received_message(event):
     if "text" in event["message"]:
         message_text = event["message"]["text"]
         print(message_text)
+        
+         if message_text == 'stores':
+             send_store_names(sender_id)
 
     elif "attachments" in event["message"]:
-        image_url = event["message"]["attachments"][0]["payload"]["url"]
-        print(image_url)
-        send_color_message(sender_id, image_url)
+        pass
+        
 
 
-"""
-def send_generic_message(recipient_id):
 
+
+def send_store_names(recipient_id):
     message_data = json.dumps({
-        "recipient": {
-            "id": recipient_id
+        "recipient_id":{
+            "id":recipient_id
         },
-        "message": {
-            "attachment": {
-                "type": "template",
-                "payload": {
-                    "template_type": "generic",
-                    "elements": [{
-                        "title": "Asylex",
-                        "subtitle": "free online legal aid on Swiss asylum law",
-                        "item_url": "https://asylex.ch/",               
-                        "image_url": "https://www.google.ch/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
-                        "buttons": [{
-                            "type": "web_url",
-                            "url": "https://asylex.ch/docs/faq_en.pdf",
-                            "title": "Open FAQ"
-                        }, {
-                            "type": "postback",
-                            "title": "Call Postback",
-                            "payload": "Payload for first bubble",
-                        }],
-                    }, {
-                        "title": "Google",
-                        "subtitle": "Find all your answers",
-                        "item_url": "https://www.google.com/",               
-                        "image_url": "https://www.google.ch/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
-                        "buttons": [{
-                            "type": "web_url",
-                            "url": "https://www.google.ch/",
-                            "title": "Google Suche"
-                        }, {
-                            "type": "postback",
-                            "title": "Call Postback",
-                            "payload": "Payload for second bubble",
-                        }]
-                    }]
+        "messaging_type": "RESPONSE",
+        "message":{
+            "text": "Available stores",
+            "quick_replies":[
+                {
+                    "content_type":"text",
+                    "title":"Shop A",
+                    "payload":"<POSTBACK_PAYLOAD>",
+                },
+                {
+                    "content_type":"text",
+                    "title":"Shop B",
+                    "payload":"<POSTBACK_PAYLOAD>",
                 }
-            }
-        }
-    })
-
-    
-
-    call_send_api(message_data)
-"""
-
-#RECIEVE IMAGE FROM USER
-def send_color_message(recipient_id,image_url):
-    app = ClarifaiApp(api_key = os.environ["CLARIFAI_API_KEY"])
-    model = app.models.get('color')
-
-    image = Image(url = image_url)
-    response = model.predict([image])
-
-    outputs = response["outputs"]
-    color_list= []
-
-    for i in outputs:
-        color_list.append(i["data"]["colors"])
-
-    colors = []
-    for j in color_list[0]:
-        colors.append(j["w3c"]["name"])
-
-    message_data = json.dumps({
-        "recipient": {
-            "id": recipient_id
-        },
-        "message": {
-            "text": "{}".format([k for k in colors])
+            ]
         }
     })
 
     call_send_api(message_data)
     
- 
-#USING CLARIFAI API
-"""
-def get_color(recipient_id):
-    app = ClarifaiApp(api_key = os.environ["CLARIFAI_API_KEY"])
-    model = app.models.get('color')
-
-    image = Image(url='https://samples.clarifai.com/metro-north.jpg')
-    response = model.predict([image])
-
-    outputs = response["outputs"]
-    color_list= []
-
-    for i in outputs:
-        color_list.append(i["data"]["colors"])
-
-    colors = []
-    for j in color_list[0]:
-        colors.append(j["w3c"]["name"])
-
-    message_data = json.dumps({
-        "recipient": {
-            "id": recipient_id
-        },
-        "message": {
-            "text": "{}".format(colors)
-        }
-    })
-
-    call_send_api(message_data)
-"""
-
-"""
-def send_text_message(recipient_id, message_text):
-
-    # encode('utf-8') included to log emojis to heroku logs
-    
-    message_data = json.dumps({
-        "recipient": {
-            "id": recipient_id
-        },
-        "message": {
-            "text": message_text
-        }
-    })
-
-    call_send_api(message_data)
 
 
-"""
-    
-
-
-#SEND API
 def call_send_api(message_data):
 
     params = {
