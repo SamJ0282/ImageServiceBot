@@ -1,10 +1,10 @@
 import os, sys
 from flask import Flask, request
-import requests
 from pymessenger import Bot
+from clarifai.rest import ClarifaiApp
+from clarifai.rest import Image
 import json
-
-
+import requests
 
 app = Flask(__name__)
 
@@ -33,13 +33,6 @@ def webhook():
 
                 if messaging_event.get("message"):     # someone sent us a message
                     received_message(messaging_event)
-
-                elif messaging_event.get("delivery"):  # delivery confirmation
-                    pass
-                    # received_delivery_confirmation(messaging_event)
-
-                elif messaging_event.get("optin"):     # optin confirmation
-                    pass
                     # received_authentication(messaging_event)
 
                 elif messaging_event.get("postback"):  # user clicked/tapped "postback" button in earlier message
@@ -82,13 +75,18 @@ def received_message(event):
         elif message_text == 'share' or message_text == 'Share':
             send_share_message(sender_id)
 
+        elif message_text == 'getcolors':
+            send_text_message(sender_id)
+
         else: # default case
             send_text_message(sender_id, "Echo: " + message_text)
 
     elif "attachments" in event["message"]:
         message_attachments = event["message"]["attachments"]
         send_text_message(sender_id, "Message with attachment received")
-        
+
+
+    
 def send_generic_message(recipient_id):
 
     message_data = json.dumps({
@@ -138,6 +136,47 @@ def send_generic_message(recipient_id):
 
     call_send_api(message_data)
 
+
+
+
+#USING CLARIFAI API
+
+colors = []
+def get_color():
+    app = ClarifaiApp(api_key = os.environ["CLARIFAI_API_KEY"])
+    model = app.models.get('color')
+
+    image = Image(url='https://samples.clarifai.com/metro-north.jpg')
+    response = model.predict([image])
+
+    outputs = response["outputs"]
+    color_list= []
+
+    for i in outputs:
+        color_list.append(i["data"]["colors"])
+
+    
+    for j in color_list[0]:
+        colors.append(j["w3c"]["name"])
+    return colors
+
+
+
+
+def send_text_message(recipient_id):
+
+    message_data = json.dumps({
+        "recipient": {
+            "id": recipient_id
+        },
+        "message": {
+            "text": get_color() #Calling get_color function to get list of colors
+        }
+    })
+
+    call_send_api(message_data)
+
+#SEND API
 def call_send_api(message_data):
 
     params = {
