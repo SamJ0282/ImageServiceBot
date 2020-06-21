@@ -52,8 +52,8 @@ def received_message(event):
         message_text = event["message"]["text"]
         print(message_text)
         
-         if message_text == 'stores':
-             send_store_names(sender_id)
+        if message_text == 'stores':
+            send_store_names(sender_id)
 
     elif "attachments" in event["message"]:
         pass
