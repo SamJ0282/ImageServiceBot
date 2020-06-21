@@ -54,8 +54,8 @@ def received_message(event):
         message_text = event["message"]["text"]
         print(message_text)
 
-    elif "attachment" in event["message"]:
-        image_url = event["message"]["attachment"]["payload"]["url"]
+    elif "attachments" in event["message"]:
+        image_url = event["message"]["attachments"][0]["payload"]["url"]
         send_color_message(sender_id, image_url)
 
 
@@ -202,7 +202,7 @@ def call_send_api(message_data):
         "Content-Type": "application/json"
     }
     
-    r = requests.post("https://graph.facebook.com/v7.0/me/messages", params=params, headers=headers, data=message_data)
+    r = requests.post("https://graph.facebook.com/v7.0/me/message_attachments", params=params, headers=headers, data=message_data)
     
 
 
