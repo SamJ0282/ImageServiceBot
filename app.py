@@ -77,7 +77,7 @@ def received_message(event):
             send_share_message(sender_id)
 
         elif message_text == 'getcolors':
-            send_text_message(sender_id)
+            get_color(sender_id)
 
         else: # default case
             send_text_message(sender_id, "Echo: " + message_text)
@@ -143,7 +143,7 @@ def send_generic_message(recipient_id):
 #USING CLARIFAI API
 
 
-colors = []
+
 def get_color():
     app = ClarifaiApp(api_key = os.environ["CLARIFAI_API_KEY"])
     model = app.models.get('color')
@@ -157,13 +157,20 @@ def get_color():
     for i in outputs:
         color_list.append(i["data"]["colors"])
 
-    
+    colors = []
     for j in color_list[0]:
         colors.append(j["w3c"]["name"])
-    return colors
-    colors.clear()
 
+    message_data = json.dumps({
+        "recipient": {
+            "id": recipient_id
+        },
+        "message": {
+            "text": "Colors are: {}".format(k for k in colors) 
+        }
+    })
 
+    call_send_api(message_data)
 
 
 def send_text_message(recipient_id):
