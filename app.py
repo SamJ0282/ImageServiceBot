@@ -138,7 +138,7 @@ def show_services(recipient_id):
             "quick_replies":[
                 {
                     "content_type":"text",
-                    "title":"Colorized Image",
+                    "title":"ColorImages",
                     "payload":"postback",
                 },
                 {
