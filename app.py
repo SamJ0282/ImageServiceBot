@@ -129,7 +129,7 @@ def send_text_message(recipient_id,message_text):
         }
     })
 
-    call_send_api(messagae_data)
+    call_send_api(message_data)
     
 def call_send_api(message_data):
 
