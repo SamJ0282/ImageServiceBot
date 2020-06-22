@@ -62,7 +62,6 @@ def received_message(event):
 
 
 
-    
 def send_colored_image(recipient_id,image_url):
     r = requests.post(
         "https://api.deepai.org/api/colorizer",
@@ -88,7 +87,53 @@ def send_colored_image(recipient_id,image_url):
         }
     })
 
-    call_send_api(message_data)
+    reciept_data = json.dumps({
+        "recipient": {
+            "id": recipient_id
+        },
+        "message":{
+            "attachment":{
+                "type":"template",
+                "payload":{
+                    "template_type":"receipt",
+                    "recipient_name":"Samyak Jain",
+                    "order_number":"1234",
+                    "currency":"USD",
+                    "payment_method":"Visa 2345",
+                    "summary":{
+                        "subtotal":75.00,
+                        "shipping_cost":4.95,
+                        "total_tax":6.19,
+                        "total_cost":56.14
+                    },
+                    "elements":[
+                        {
+                            "title":"Classic White T-Shirt",
+                            "subtitle":"100% Soft and Luxurious Cotton",
+                            "quantity":2,
+                            "price":50,
+                            "currency":"USD",
+                        },
+                        {
+                            "title":"Classic Gray T-Shirt",
+                            "subtitle":"100% Soft and Luxurious Cotton",
+                            "quantity":1,
+                            "price":25,
+                            "currency":"USD",
+                        }
+                    ]
+                }
+            }
+        }
+        
+    })
+    
+    call_send_image(message_data)
+    call_send_reciept(reciept_data)
+    
+    
+    
+    
 
 def send_text_message(recipient_id,message_text):
 
@@ -102,12 +147,11 @@ def send_text_message(recipient_id,message_text):
     })
 
     call_send_api(message_data)
+    
 
 
 
-
-
-def call_send_api(message_data):
+def call_send_image(message_data):
 
     params = {
         "access_token": os.environ["PAGE_ACCESS_TOKEN"]
@@ -118,7 +162,16 @@ def call_send_api(message_data):
     
     r = requests.post("https://graph.facebook.com/v7.0/me/messages", params=params, headers=headers, data=message_data)
     
+def call_send_reciept(reciept_data):
 
+    params = {
+        "access_token": os.environ["PAGE_ACCESS_TOKEN"]
+    }
+    headers = {
+        "Content-Type": "application/json"
+    }
+    
+    r = requests.post("https://graph.facebook.com/v7.0/me/messages", params=params, headers=headers, data=reciept_data)
 
 if __name__ == "__main__":
 	app.run(debug = True, port = 80)
