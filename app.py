@@ -53,7 +53,8 @@ def received_message(event):
         print(message_text)
 
         if message_text == 'ColorImages':
-            check_image(sender_id)
+            send_text_message(sender_id,"Upload picture")
+            
 
     elif "attachments" in event["message"]:
         image_url = event["message"]["attachments"][0]["payload"]["url"]
