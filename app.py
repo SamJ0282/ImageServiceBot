@@ -128,8 +128,8 @@ def send_colored_image(recipient_id,image_url):
         
     })
     
-    call_send_image(message_data)
-    call_send_reciept(reciept_data)
+    combined_data = [message_data,reciept_data]
+    call_send_api(combined_data)
     
     
     
@@ -146,12 +146,10 @@ def send_text_message(recipient_id,message_text):
         }
     })
 
-    call_send_api(message_data)
-    
+    call_send_api(messagae_data)
+   
 
-
-
-def call_send_image(message_data):
+def call_send_api(combined_data):
 
     params = {
         "access_token": os.environ["PAGE_ACCESS_TOKEN"]
@@ -159,19 +157,12 @@ def call_send_image(message_data):
     headers = {
         "Content-Type": "application/json"
     }
-    
-    r = requests.post("https://graph.facebook.com/v7.0/me/messages", params=params, headers=headers, data=message_data)
-    
-def call_send_reciept(reciept_data):
 
-    params = {
-        "access_token": os.environ["PAGE_ACCESS_TOKEN"]
-    }
-    headers = {
-        "Content-Type": "application/json"
-    }
     
-    r = requests.post("https://graph.facebook.com/v7.0/me/messages", params=params, headers=headers, data=reciept_data)
+    for x in range(len(combined_data)):
+        r = requests.post("https://graph.facebook.com/v7.0/me/messages", params=params, headers=headers, data= combined_data[x])
+    
+
 
 if __name__ == "__main__":
 	app.run(debug = True, port = 80)
