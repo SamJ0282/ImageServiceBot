@@ -90,10 +90,9 @@ def send_colored_image(recipient_id,image_url):
 
     
     call_send_api(message_data)
-    
-    
-    
-    
+
+        
+
 
 
 
@@ -110,12 +109,8 @@ def received_postback(event):
 
     if payload == 'Get Started':
         # Get Started button was pressed
-         
-        send_text_message(sender_id,"Welcome")
-        
-    elif payload == 'ColorImages':
-        
-        send_text_message(sender_id,"Upload black and white picture")
+         show_services(sender_id)
+
     else:
         # Notify sender that postback was successful
         send_text_message(sender_id,"Postback successfull")
@@ -132,7 +127,31 @@ def send_text_message(recipient_id,message_text):
     })
 
     call_send_api(message_data)
-    
+
+def show_services(recipient_id):
+    message_data = ({
+        "recipient":{
+            "id":recipient_id
+        },
+        "messaging_type": "RESPONSE",
+        "message":{
+            "text": "Choose a service",
+            "quick_replies":[
+                {
+                    "content_type":"text",
+                    "title":"Colorized Image",
+                    "payload":"postback",
+                },
+                {
+                    "content_type":"text",
+                    "title":"Color extractor",
+                    "payload":"postback",
+                }
+            ]
+        }
+    })
+    call_send_api(message_data)
+
 def call_send_api(message_data):
 
     params = {
