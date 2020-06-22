@@ -110,12 +110,12 @@ def received_postback(event):
 
     if payload == 'Get Started':
         # Get Started button was pressed
-        message_text = "Welcome"
-        send_text_message(sender_id,message_text)
+         
+        send_text_message(sender_id,"Welcome")
         
     elif payload == 'ColorImages':
-        message_text = "Upload black and white picture"
-        send_text_message(sender_id,message_text)
+        
+        send_text_message(sender_id,"Upload black and white picture")
     else:
         # Notify sender that postback was successful
         send_text_message(sender_id,"Postback successfull")
