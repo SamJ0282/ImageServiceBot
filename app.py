@@ -110,16 +110,18 @@ def received_postback(event):
 
     if payload == 'Get Started':
         # Get Started button was pressed
-        send_text_message(sender_id, "Welcome")
+        message_text = "Welcome"
+        send_text_message(sender_id,message_text)
+        
     elif payload == 'ColorImages':
-        send_text_message(sender_id, "Upload black and white picture")
+        message_text = "Upload black and white picture"
+        send_text_message(sender_id,message_text)
     else:
         # Notify sender that postback was successful
-        send_text_message(sender_id, "")
+        send_text_message(sender_id)
 
 
 def send_text_message(recipient_id,message_text):
-
     message_data = json.dumps({
         "recipient": {
             "id": recipient_id
