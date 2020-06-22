@@ -105,8 +105,6 @@ def received_postback(event):
     # button for Structured Messages
     payload = event["postback"]["payload"]
 
-    
-
     if payload == 'Get Started':
         # Get Started button was pressed
          show_services(sender_id)
@@ -129,7 +127,7 @@ def send_text_message(recipient_id,message_text):
     call_send_api(message_data)
 
 def show_services(recipient_id):
-    message_data = ({
+    message_data = json.dumps({
         "recipient":{
             "id":recipient_id
         },
