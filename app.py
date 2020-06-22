@@ -118,7 +118,7 @@ def received_postback(event):
         send_text_message(sender_id,message_text)
     else:
         # Notify sender that postback was successful
-        send_text_message(sender_id)
+        send_text_message(sender_id,"Postback successfull")
 
 
 def send_text_message(recipient_id,message_text):
