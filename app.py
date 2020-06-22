@@ -51,13 +51,14 @@ def received_message(event):
     if "text" in event["message"]:
         message_text = event["message"]["text"]
         print(message_text)
-        send_text_message(sender_id,message_text)
+
+        if message_text == 'ColorImages':
+            check_image(sender_id)
 
     elif "attachments" in event["message"]:
         image_url = event["message"]["attachments"][0]["payload"]["url"]
         print(image_url)
         send_colored_image(sender_id,image_url)
-        
         
 
 
@@ -87,53 +88,35 @@ def send_colored_image(recipient_id,image_url):
         }
     })
 
-    reciept_data = json.dumps({
-        "recipient": {
-            "id": recipient_id
-        },
-        "message":{
-            "attachment":{
-                "type":"template",
-                "payload":{
-                    "template_type":"receipt",
-                    "recipient_name":"Samyak Jain",
-                    "order_number":"1234",
-                    "currency":"USD",
-                    "payment_method":"Visa 2345",
-                    "summary":{
-                        "subtotal":75.00,
-                        "shipping_cost":4.95,
-                        "total_tax":6.19,
-                        "total_cost":56.14
-                    },
-                    "elements":[
-                        {
-                            "title":"Classic White T-Shirt",
-                            "subtitle":"100% Soft and Luxurious Cotton",
-                            "quantity":2,
-                            "price":50,
-                            "currency":"USD",
-                        },
-                        {
-                            "title":"Classic Gray T-Shirt",
-                            "subtitle":"100% Soft and Luxurious Cotton",
-                            "quantity":1,
-                            "price":25,
-                            "currency":"USD",
-                        }
-                    ]
-                }
-            }
-        }
-        
-    })
     
-    combined_data = [message_data,reciept_data]
-    call_send_api(combined_data)
+    call_send_api(message_data)
     
     
     
     
+
+
+
+def received_postback(event):
+
+    sender_id = event["sender"]["id"]        # the facebook ID of the person sending you the message
+    recipient_id = event["recipient"]["id"]  # the recipient's ID, which should be your page's facebook ID
+
+    # The payload param is a developer-defined field which is set in a postback
+    # button for Structured Messages
+    payload = event["postback"]["payload"]
+
+    
+
+    if payload == 'Get Started':
+        # Get Started button was pressed
+        send_text_message(sender_id, "Welcome")
+    elif payload == 'ColorImages':
+        send_text_message(sender_id, "Upload black and white picture")
+    else:
+        # Notify sender that postback was successful
+        send_text_message(sender_id, "")
+
 
 def send_text_message(recipient_id,message_text):
 
@@ -147,9 +130,8 @@ def send_text_message(recipient_id,message_text):
     })
 
     call_send_api(messagae_data)
-   
-
-def call_send_api(combined_data):
+    
+def call_send_api(message_data):
 
     params = {
         "access_token": os.environ["PAGE_ACCESS_TOKEN"]
@@ -159,8 +141,7 @@ def call_send_api(combined_data):
     }
 
     
-    for x in range(len(combined_data)):
-        r = requests.post("https://graph.facebook.com/v7.0/me/messages", params=params, headers=headers, data= combined_data[x])
+    r = requests.post("https://graph.facebook.com/v7.0/me/messages", params=params, headers=headers, data=message_data)
     
 
 
