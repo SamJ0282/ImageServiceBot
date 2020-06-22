@@ -51,60 +51,60 @@ def received_message(event):
     if "text" in event["message"]:
         message_text = event["message"]["text"]
         print(message_text)
-        
-        if message_text == 'stores':
-            send_store_names(sender_id)
-        if message_text == 'shop A':
-            send_storeA_details(sender_id)
+        send_text_message(sender_id,message_text)
 
     elif "attachments" in event["message"]:
-        pass
+        image_url = event["message"]["attachments"][0]["payload"]["url"]
+        print(image_url)
+        send_colored_image(sender_id,image_url)
+        
         
 
 
 
-
-def send_store_names(recipient_id):
-    message_data = json.dumps({
-        "recipient":{
-            "id":recipient_id
+    
+def send_colored_image(recipient_id,image_url):
+    r = requests.post(
+        "https://api.deepai.org/api/colorizer",
+        data={
+            'image': image_url,
         },
-        "messaging_type": "RESPONSE",
-        "message":{
-            "text": "Available stores",
-            "quick_replies":[
-                {
-                    "content_type":"text",
-                    "title":"Shop A",
-                    "payload":"<POSTBACK_PAYLOAD>",
-                },
-                {
-                    "content_type":"text",
-                    "title":"Shop B",
-                    "payload":"<POSTBACK_PAYLOAD>",
+        headers={'api-key': 'f8f549ed-8c2f-4c76-ad8c-78c6df57b511'}
+    )
+
+    colored_image = r.json()['output_url']
+
+    message_data = json.dumps({
+        "recipient": {
+            "id": recipient_id
+        },
+        "message": {
+            "attachment": {
+                "type":"image",
+                "payload":{
+                    "url": colored_image
                 }
-            ]
+            }
         }
     })
 
     call_send_api(message_data)
 
+def send_text_message(recipient_id,message_text):
 
-
-items = ["Brown Bread","Lays","Potatoes"]
-def send_storeA_details(recipient_id):
-    
     message_data = json.dumps({
-        "recipient":{
-            "id":recipient_id
+        "recipient": {
+            "id": recipient_id
         },
-        "message":{
-            "text": "{}".format(items)
+        "message": {
+            "text": message_text
         }
     })
 
     call_send_api(message_data)
-    
+
+
+
 
 
 def call_send_api(message_data):
@@ -122,3 +122,10 @@ def call_send_api(message_data):
 
 if __name__ == "__main__":
 	app.run(debug = True, port = 80)
+
+
+
+
+
+
+
