@@ -72,7 +72,8 @@ def received_message(event):
             #send_colored_image(sender_id,image_url)
             send_neural_style_image(sender_id,content_image_url,style_image_url)
         
-
+c = 0
+k = 0
 
 def send_colored_image(recipient_id,image_url):
     r = requests.post(
@@ -101,6 +102,7 @@ def send_colored_image(recipient_id,image_url):
 
     
     call_send_api(message_data)
+    c += 1
     show_services(recipient_id)
 
   
@@ -130,6 +132,7 @@ def send_neural_style_image(recipient_id,content_image_url,style_image_url):
     })
 
     call_send_api(message_data)
+    k += 1
     show_services(recipient_id)
 
 def received_postback(event):
@@ -144,12 +147,25 @@ def received_postback(event):
     if payload == 'Get Started':
         # Get Started button was pressed
          show_services(sender_id)
+    if payload == 'Credits Left':
+        show_credits_left(sender_id)
 
     else:
         # Notify sender that postback was successful
         send_text_message(sender_id,"Postback successfull")
 
+def show_credits_left(recipient_id):
+    message_data = json.dumps({
+        "recipient": {
+            "id": recipient_id
+        },
+        "message": {
+            "text": "You have {5} credits left"
+        }
+    })
 
+    call_send_api(message_data)
+    
 def send_text_message(recipient_id,message_text):
     message_data = json.dumps({
         "recipient": {
