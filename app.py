@@ -59,13 +59,16 @@ def received_message(event):
 
     elif "attachments" in event["message"]:
         #image = event["message"]["attachments"][0]["payload"]["url"]
-        content_image_url = event["message"]["attachments"][0]["payload"]["url"]
-        style_image_url= event["message"]["attachments"][0]["payload"]["url"]
-        print(content_image_url)
-        print(style_image_url)
-        #send_colored_image(sender_id,image_url)
-        send_neural_style_image(sender_id,content_image_url,style_image_url)
-
+        attachments = event["message"]["attachments"]
+        if len(attachments) = 2:
+            content_image_url = event["message"]["attachments"][0]["payload"]["url"]
+            style_image_url= event["message"]["attachments"][1]["payload"]["url"]
+            print(content_image_url)
+            print(style_image_url)
+            #send_colored_image(sender_id,image_url)
+            send_neural_style_image(sender_id,content_image_url,style_image_url)
+        elif len(attachments) = 1:
+            send_text_message(sender_id,"Upload one more image")
 
 """
 def send_colored_image(recipient_id,image_url):
