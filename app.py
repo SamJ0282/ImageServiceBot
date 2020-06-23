@@ -54,7 +54,7 @@ def received_message(event):
 
         if message_text == 'ColorImages':
             send_text_message(sender_id,"Upload picture")
-        if message_text == 'Neural Style Image':
+        if message_text == 'Neural Image Style':
             send_text_message(sender_id,"Upload Two pictures one by one")
 
     elif "attachments" in event["message"]:
