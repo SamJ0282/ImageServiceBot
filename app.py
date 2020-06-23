@@ -91,6 +91,7 @@ def send_colored_image(recipient_id,image_url):
 
     
     call_send_api(message_data)
+    show_services(recipient_id)
 
         
 
