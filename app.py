@@ -160,7 +160,7 @@ def show_credits_left(recipient_id):
             "id": recipient_id
         },
         "message": {
-            "text": "You have {5} credits left"
+            "text": "You have 5 credits left"
         }
     })
 
