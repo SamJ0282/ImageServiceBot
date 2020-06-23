@@ -71,9 +71,7 @@ def received_message(event):
             print(style_image_url)
             #send_colored_image(sender_id,image_url)
             send_neural_style_image(sender_id,content_image_url,style_image_url)
-        
-c = 0
-k = 0
+
 
 def send_colored_image(recipient_id,image_url):
     r = requests.post(
@@ -102,7 +100,7 @@ def send_colored_image(recipient_id,image_url):
 
     
     call_send_api(message_data)
-    c += 1
+    
     show_services(recipient_id)
 
   
@@ -132,7 +130,7 @@ def send_neural_style_image(recipient_id,content_image_url,style_image_url):
     })
 
     call_send_api(message_data)
-    k += 1
+
     show_services(recipient_id)
 
 def received_postback(event):
