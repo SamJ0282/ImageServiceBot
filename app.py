@@ -147,7 +147,7 @@ def received_postback(event):
     if payload == 'Get Started':
         # Get Started button was pressed
          show_services(sender_id)
-    if payload == 'Credits Left':
+    elif payload == 'Credits Left':
         show_credits_left(sender_id)
 
     else:
