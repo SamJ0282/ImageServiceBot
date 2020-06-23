@@ -174,6 +174,11 @@ def show_services(recipient_id):
                     "content_type":"text",
                     "title":"Color extractor",
                     "payload":"postback",
+                },
+                {
+                    "content_type":"text",
+                    "title":"Neural Image Style",
+                    "payload":"postback",
                 }
             ]
         }
