@@ -54,16 +54,20 @@ def received_message(event):
 
         if message_text == 'ColorImages':
             send_text_message(sender_id,"Upload picture")
-            
+        if message_text === 'Neural Style Image':
+            send_text_message(sender_id,"Upload Two pictures one by one")
 
     elif "attachments" in event["message"]:
-        image_url = event["message"]["attachments"][0]["payload"]["url"]
-        print(image_url)
-        send_colored_image(sender_id,image_url)
-        
+        #image = event["message"]["attachments"][0]["payload"]["url"]
+        content_image_url = event["message"]["attachments"][0]["payload"]["url"]
+        style_image_url= event["message"]["attachments"][1]["payload"]["url"]
+        print(content_image_url)
+        print(style_image_url)
+        #send_colored_image(sender_id,image_url)
+        send_neural_style_image(sender_id,content_image_url,style_image_url)
 
 
-
+"""
 def send_colored_image(recipient_id,image_url):
     r = requests.post(
         "https://api.deepai.org/api/colorizer",
@@ -93,10 +97,34 @@ def send_colored_image(recipient_id,image_url):
     call_send_api(message_data)
     show_services(recipient_id)
 
-        
+"""  
+send_neural_style_image(sender_id,content_image_url,style_image_url):
+    r = requests.post(
+        "https://api.deepai.org/api/neural-style",
+        data={
+            'style': content_image_url,
+            'content': style_image_url
+        },
+        headers={'api-key': 'f8f549ed-8c2f-4c76-ad8c-78c6df57b511'}
+    )
+    colored_image = r.json()['output_url']
 
+    message_data = json.dumps({
+        "recipient": {
+            "id": recipient_id
+        },
+        "message": {
+            "attachment": {
+                "type":"image",
+                "payload":{
+                    "url": colored_image
+                }
+            }
+        }
+    })
 
-
+    call_send_api(message_data)
+    show_services(recipient_id)
 
 def received_postback(event):
 
