@@ -98,7 +98,7 @@ def send_colored_image(recipient_id,image_url):
     show_services(recipient_id)
 
 """  
-send_neural_style_image(sender_id,content_image_url,style_image_url):
+send_neural_style_image(recipient_id,content_image_url,style_image_url):
     r = requests.post(
         "https://api.deepai.org/api/neural-style",
         data={
